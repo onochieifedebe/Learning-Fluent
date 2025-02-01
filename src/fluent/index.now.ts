@@ -1,6 +1,43 @@
 import '@servicenow/sdk/global'
-import { BusinessRule, ClientScript } from '@servicenow/sdk/core'
+import { BusinessRule, ChoiceColumn, ClientScript, IntegerColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/sdk/core'
 import { showStateUpdate } from '../server/script.js'
+
+
+export const x_1387810_other_fl_service_approval = Table({
+    name: 'x_1387810_other_fl_service_approval',
+    label: 'Service Approval',
+    schema: {
+        u_order: IntegerColumn({
+            label: 'Order'
+        }),
+        u_source: ChoiceColumn({label: "Approval Source",
+            choices: {
+                decision_table: {
+                    label: 'Decision Table',
+                    sequence: 1,
+                    inactive: false
+                },
+                funding_profile: {
+                    label: 'Funding Profile',
+                    sequence: 2,
+                    inactive: false
+                },
+                entitlement: {
+                    label: 'Entitlement',
+                    sequence: 3,
+                    inactive: false
+                }
+            }
+        }),
+        u_approver: ReferenceColumn({
+            label: 'Approver',
+            referenceTable: 'sys_user'
+        }),
+        u_approval_type: StringColumn({
+            label: "Approval Type"
+        })
+    }
+})
 
 //creates a client script that pops up 'Table loaded successfully!!' message every time todo record is loaded
 ClientScript({
@@ -30,4 +67,16 @@ BusinessRule({
     order: 100,
     when: 'after',
     active: true,
+})
+
+ClientScript({
+    $id: Now.ID['cs01'],
+    name: 'Hide/Show Approval Type',
+    table: 'x_1387810_other_fl_service_approval',
+    type: 'onChange',
+    field: 'u_source',
+    ui_type: 'all',
+    active: false,
+    description: "Only shows the Approval Type field when the Approval Source is Decision Table",
+    isolate_script: false
 })
