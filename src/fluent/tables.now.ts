@@ -55,9 +55,9 @@ export const x_1387810_other_fl_service_details = Table({
 
 
 ClientScript({
-    $id: Now.ID['cs01'],
+    $id: Now.ID['cs02'],
     name: 'Hide/Show Approval Type',
-    table: 'x_1387810_other_fl_service_approval',
+    table: 'x_1387810_other_fl_service_details',
     type: 'onChange',
     field: 'u_source',
     ui_type: 'all',
